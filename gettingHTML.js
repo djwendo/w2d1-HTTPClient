@@ -1,18 +1,21 @@
 var https = require('https');
 var incomingData = '';
 
-function getHTML (options, callback) {
+module.exports = function getHTML (options, callback) {
 
-  https.get(options, function (response) {
-    response.setEncoding('utf8');
-    response.on('data', function (data) {
-      incomingData += data;
+  function getHTML (options, callback) {
+
+    https.get(options, function (response) {
+      response.setEncoding('utf8');
+      response.on('data', function (data) {
+        incomingData += data;
+      });
+      response.on('end', function() {
+        callback(incomingData);
+      });
     });
-    response.on('end', function() {
-      callback(incomingData);
-    });
-  });
-}
+  }
+};
 
 function printHTML (html) {
   console.log(html);
